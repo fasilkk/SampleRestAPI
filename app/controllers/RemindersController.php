@@ -1,8 +1,7 @@
 <?php
 
-class RemindersController extends ApiController {
-
-
+class RemindersController extends ApiController
+{
     /**
      * Handle a POST request to remind a user of their password.
      *
@@ -10,8 +9,7 @@ class RemindersController extends ApiController {
      */
     public function postRemind()
     {
-        switch ($response = Password::remind(Input::only('email')))
-        {
+        switch ($response = Password::remind(Input::only('email'))) {
             case Password::INVALID_USER:
                 return $this->responseForbidden('associated user not found !');
 
@@ -23,16 +21,17 @@ class RemindersController extends ApiController {
     /**
      * Display the password reset view for the given token.
      *
-     * @param  string $token
+     * @param string $token
+     *
      * @return Response
      */
-    public function getReset( $token = null )
+    public function getReset($token = null)
     {
+        if (is_null($token)) {
+            App::abort(404);
+        }
 
-        if ( is_null($token) ) App::abort(404);
-
-        return $this->response(array('token' => $token));
-
+        return $this->response(['token' => $token]);
     }
 
     /**
@@ -43,18 +42,16 @@ class RemindersController extends ApiController {
     public function postReset()
     {
         $credentials = Input::only(
-            'email' , 'password' , 'password_confirmation' , 'token'
+            'email', 'password', 'password_confirmation', 'token'
         );
 
-        $response = Password::reset($credentials , function ( $user , $password )
-        {
+        $response = Password::reset($credentials, function ($user, $password) {
             $user->password = $password;
 
             $user->save();
         });
 
-        switch ($response)
-        {
+        switch ($response) {
             case Password::INVALID_PASSWORD:
             case Password::INVALID_TOKEN:
             case Password::INVALID_USER:
@@ -64,5 +61,4 @@ class RemindersController extends ApiController {
                 return $this->responseSuccess('Password Reset Succesfully !');
         }
     }
-
 }

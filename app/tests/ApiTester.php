@@ -1,7 +1,9 @@
 <?php
-use Faker\Factory as Faker;
-Class ApiTester extends TestCase{
 
+use Faker\Factory as Faker;
+
+class ApiTester extends TestCase
+{
     /**
      * @var \Faker\Generator
      */
@@ -10,59 +12,47 @@ Class ApiTester extends TestCase{
     /**
      * @var int
      */
-    protected  $statFavitems;
+    protected $statFavitems;
 
     protected $group;
 
-    protected $contacts = array();
+    protected $contacts = [];
 
-
-
-    function __construct()
+    public function __construct()
     {
         $this->fake = Faker::create();
-        $this->statFavitems = array(
+        $this->statFavitems = [
 
-            'name' => 'this is a test data',
+            'name'    => 'this is a test data',
             'address' => 'this is a test data',
-            'lat' => '18.920882',
-            'lng' => '72.897720',
+            'lat'     => '18.920882',
+            'lng'     => '72.897720',
 
-        );
+        ];
 
+        $this->contacts['numbers'] = ['+49162921322', '+49162921325', '+49162926397', '+49162928673', '+49162926548'];
 
-       
-                $this->contacts['numbers'] = array('+49162921322','+49162921325','+49162926397','+49162928673','+49162926548');
-        
-
-
-        $this->group = array('name' => 'test Group');
-
+        $this->group = ['name' => 'test Group'];
     }
 
     /**
-     * setting up testing enviorment
-     *
+     * setting up testing enviorment.
      */
-    public  function setUp()
+    public function setUp()
     {
-
         parent::setUp();
 
-         $this->app['artisan']->call('migrate');
+        $this->app['artisan']->call('migrate');
 
         Route::enableFilters();
-
     }
-    public static  function tearDownAfterClass()
+
+    public static function tearDownAfterClass()
     {
-
-          Artisan::call('migrate:reset');
-
+        Artisan::call('migrate:reset');
     }
 
-
-    public function CreateUserFakerData($userFields =[])
+    public function CreateUserFakerData($userFields = [])
     {
         $user = array_merge([
 
@@ -71,76 +61,60 @@ Class ApiTester extends TestCase{
             'email'    => $this->fake->email,
             'fname'    => $this->fake->firstName,
             'lname'    => $this->fake->lastName,
-            'address'  => $this->fake->address
+            'address'  => $this->fake->address,
 
-        ],$userFields);
-
+        ], $userFields);
 
         return $user;
     }
 
-
-
-    
-
-    public function getUserInvalidLoginData($userFields =[])
+    public function getUserInvalidLoginData($userFields = [])
     {
         $user = array_merge([
 
             'username' => $this->fake->username,
             'password' => $this->fake->name,
 
+        ], $userFields);
 
-        ],$userFields);
         return $user;
     }
 
-
-    public  function getUserValidLoginData($user)
+    public function getUserValidLoginData($user)
     {
-
-         return array('username' =>$user['username'],'password'=>$user['password']);
+        return ['username' =>$user['username'], 'password'=>$user['password']];
     }
 
     public function sendRestPasswordRequest()
     {
-
     }
 
-
-    public function getJson($uri , $user=array())
+    public function getJson($uri, $user = [])
     {
-
-
-        if(empty($user))
-            return json_decode($this->call('GET' , $uri)->getContent());
-        else
-            return json_decode($this->call('GET' , $uri , $user)->getContent());
+        if (empty($user)) {
+            return json_decode($this->call('GET', $uri)->getContent());
+        } else {
+            return json_decode($this->call('GET', $uri, $user)->getContent());
+        }
     }
 
-    public function postJson($uri , $user=array())
+    public function postJson($uri, $user = [])
     {
-
-        return json_decode($this->call('POST' , $uri , $user)->getContent());
+        return json_decode($this->call('POST', $uri, $user)->getContent());
     }
 
-    public function fileJson($uri , $user=array())
+    public function fileJson($uri, $user = [])
     {
-
-        return json_decode($this->call('FILE' , $uri , $user)->getContent());
+        return json_decode($this->call('FILE', $uri, $user)->getContent());
     }
 
-
-    public function putJson($uri , $user=array())
+    public function putJson($uri, $user = [])
     {
-
-        return json_decode($this->call('PUT' , $uri , $user)->getContent());
+        return json_decode($this->call('PUT', $uri, $user)->getContent());
     }
 
-    public  function deleteJson($uri,$user=array())
+    public function deleteJson($uri, $user = [])
     {
-        return json_decode($this->call('DELETE' ,  $uri , $user)->getContent());
-
+        return json_decode($this->call('DELETE', $uri, $user)->getContent());
     }
-
 }

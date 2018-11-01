@@ -1,11 +1,11 @@
 <?php
 
-class Contact extends \Eloquent {
-
+class Contact extends \Eloquent
+{
     /**
      * @var string
      */
-    protected $table = "contacts";
+    protected $table = 'contacts';
 
     /**
      * @var array
@@ -13,17 +13,18 @@ class Contact extends \Eloquent {
     protected $fillable = ['number'];
 
     /**
-     * return associated group
+     * return associated group.
+     *
      * @return mixed
      */
     public function group()
     {
         return $this->belongsTo('Group');
-
     }
 
     /**
-     * return associated user
+     * return associated user.
+     *
      * @return mixed
      */
     public function user()

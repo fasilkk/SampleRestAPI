@@ -1,7 +1,7 @@
 <?php
 
-class Profile extends Eloquent {
-
+class Profile extends Eloquent
+{
     /**
      * The database table used by the model.
      *
@@ -10,20 +10,19 @@ class Profile extends Eloquent {
     protected $table = 'user_profiles';
 
     /**
-     * Fillable fields
+     * Fillable fields.
      *
      * @var array
      */
     protected $fillable = ['phone_number'];
 
     /**
-     * Associated User
+     * Associated User.
+     *
      * @return mixed
      */
     public function user()
     {
-
         return $this->belongsTo('User');
     }
-
 }

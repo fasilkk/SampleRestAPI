@@ -1,32 +1,38 @@
 <?php
 
 /**
- * Print out debug informations
+ * Print out debug informations.
+ *
  * @param mixed $value
  * @param bool  $stop
+ *
  * @return string echoed
  */
 function D($value, $stop = false)
 {
-    echo '<pre>' . print_r($value, true) . '</pre>';
+    echo '<pre>'.print_r($value, true).'</pre>';
 
-    if($stop) die();
+    if ($stop) {
+        die();
+    }
 }
 
 /**
- * Print out debug informations for JavaScript
+ * Print out debug informations for JavaScript.
+ *
  * @param mixed $value
+ *
  * @return string
  */
 function DJ($value)
 {
-    return '<pre>' . print_r($value, true) . '</pre>';
+    return '<pre>'.print_r($value, true).'</pre>';
 
     die();
 }
 
 /**
- * Print out Carbon format date time
+ * Print out Carbon format date time.
  *
  * @param object $attr
  * @param string $format
@@ -38,33 +44,34 @@ function DT($attr, $format)
 }
 
 /**
- * Get config key
+ * Get config key.
+ *
  * @param string $config
  * @param string $key
+ *
  * @return string
  */
 function CONFIG($config, $key)
 {
-    if($key == '') return array();
+    if ($key == '') {
+        return [];
+    }
 
     $conf = Config::get($config);
 
     return $conf[$key];
 }
 
-
-
-
-
-/**
+/*
  * SYSTEM
  */
 
-if ( ! function_exists('env'))
-{
+if (!function_exists('env')) {
     /**
-     * Get environment
+     * Get environment.
+     *
      * @param string $env
+     *
      * @return string
      */
     function env($env)
@@ -73,8 +80,7 @@ if ( ! function_exists('env'))
     }
 }
 
-if ( ! function_exists('public_path'))
-{
+if (!function_exists('public_path')) {
     /**
      * Get public path.
      *
@@ -86,81 +92,77 @@ if ( ! function_exists('public_path'))
     }
 }
 
-/**
+/*
  * PATHS
  */
 
-if ( ! function_exists('config_path'))
-{
+if (!function_exists('config_path')) {
     /**
      * Get the path to the cms/config folder.
      *
-     * @param   string  $path
-     * @return  string
+     * @param string $path
+     *
+     * @return string
      */
     function config_path($file = '')
     {
-        if( WB() )
-        {
-            return __DIR__.'/config/' . $file;
-        }
-        else
-        {
-            return app_path('config/packages/ewizycms/cms/' . $file);
+        if (WB()) {
+            return __DIR__.'/config/'.$file;
+        } else {
+            return app_path('config/packages/ewizycms/cms/'.$file);
         }
     }
 }
 
-if ( ! function_exists('themes_path'))
-{
+if (!function_exists('themes_path')) {
     /**
      * Get the path to the storage folder.
      *
-     * @param   string  $path
-     * @return  string
+     * @param string $path
+     *
+     * @return string
      */
     function themes_path($path = '')
     {
-        return app('themes.path') . ($path ? '/' . $path : $path);
+        return app('themes.path').($path ? '/'.$path : $path);
     }
 }
 
-if ( ! function_exists('theme_settings'))
-{
+if (!function_exists('theme_settings')) {
     /**
      * Get the path to the storage folder.
      *
-     * @param   string  $path
-     * @return  string
+     * @param string $path
+     *
+     * @return string
      */
     function theme_settings($path = '')
     {
-        require $path . '/theme.php';
+        require $path.'/theme.php';
 
         return $THEME_SETTINGS;
     }
 }
 
-/**
+/*
  * TOOLS
  */
 
-if ( ! function_exists('array_min_key'))
-{
+if (!function_exists('array_min_key')) {
     /**
-     * Reduce an array with minimal key
+     * Reduce an array with minimal key.
      *
-     * @param  array 	$array
-     * @param  mixed 	$min_key
+     * @param array $array
+     * @param mixed $min_key
+     *
      * @return array
      */
     function array_min_key($array, $min_key)
     {
-
         $min_val = $array[$min_key];
 
         foreach ($array as $key => $value) {
-            if($value >= $min_val) {
+            if ($value >= $min_val) {
                 $tmp_array[$key] = $value;
             }
         }
@@ -169,13 +171,13 @@ if ( ! function_exists('array_min_key'))
     }
 }
 
-if ( ! function_exists('active'))
-{
+if (!function_exists('active')) {
     /**
-     * Print out class=active if true
+     * Print out class=active if true.
      *
-     * @param  string $var
-     * @param  string $fix
+     * @param string $var
+     * @param string $fix
+     *
      * @return bool
      */
     function active($var, $fix)
@@ -184,13 +186,13 @@ if ( ! function_exists('active'))
     }
 }
 
-if ( ! function_exists('checked'))
-{
+if (!function_exists('checked')) {
     /**
-     * Print out checked=checked if true
+     * Print out checked=checked if true.
      *
-     * @param  string $var
-     * @param  string $fix
+     * @param string $var
+     * @param string $fix
+     *
      * @return bool
      */
     function checked($var, $fix)
@@ -199,13 +201,13 @@ if ( ! function_exists('checked'))
     }
 }
 
-if ( ! function_exists('selected'))
-{
+if (!function_exists('selected')) {
     /**
-     * Print out selected=selected if true
+     * Print out selected=selected if true.
      *
-     * @param  string $var
-     * @param  string $fix
+     * @param string $var
+     * @param string $fix
+     *
      * @return bool
      */
     function selected($var, $fix)
@@ -214,13 +216,13 @@ if ( ! function_exists('selected'))
     }
 }
 
-if ( ! function_exists('get_json'))
-{
+if (!function_exists('get_json')) {
     /**
-     * Get json input
+     * Get json input.
      *
-     * @param  string $key
-     * @param  bool   $array
+     * @param string $key
+     * @param bool   $array
+     *
      * @return array
      */
     function get_json($key, $array = true)
@@ -229,12 +231,12 @@ if ( ! function_exists('get_json'))
     }
 }
 
-if ( ! function_exists('is_empty'))
-{
+if (!function_exists('is_empty')) {
     /**
-     * Check object is empty
+     * Check object is empty.
      *
-     * @param  string $var
+     * @param string $var
+     *
      * @return bool
      */
     function is_empty($var)
@@ -243,28 +245,28 @@ if ( ! function_exists('is_empty'))
     }
 }
 
-if ( ! function_exists('link_to_cms'))
-{
+if (!function_exists('link_to_cms')) {
     /**
-     * Link to cms route
+     * Link to cms route.
      *
-     * @param  string $var
-     * @param  string $fix
+     * @param string $var
+     * @param string $fix
+     *
      * @return bool
      */
-    function link_to_cms($link, $title, $attributes = array(), $secure = null)
+    function link_to_cms($link, $title, $attributes = [], $secure = null)
     {
-        return link_to('cms/' . $link, $title, $attributes, $secure);
+        return link_to('cms/'.$link, $title, $attributes, $secure);
     }
 }
 
-if ( ! function_exists('selected'))
-{
+if (!function_exists('selected')) {
     /**
-     * Print out selected=selected if true
+     * Print out selected=selected if true.
      *
-     * @param  string $var
-     * @param  string $fix
+     * @param string $var
+     * @param string $fix
+     *
      * @return bool
      */
     function selected($var, $fix)
@@ -273,14 +275,14 @@ if ( ! function_exists('selected'))
     }
 }
 
-if ( ! function_exists('system_role_class'))
-{
+if (!function_exists('system_role_class')) {
     /**
-     * Print class if system role
+     * Print class if system role.
      *
-     * @param  integer $level
-     * @param  string  $class_yes
-     * @param  string  $class_not
+     * @param int    $level
+     * @param string $class_yes
+     * @param string $class_not
+     *
      * @return string
      */
     function system_role_class($level, $class_yes, $class_not)
