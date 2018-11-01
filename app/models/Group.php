@@ -1,21 +1,18 @@
 <?php
 
-class Group extends \Eloquent {
-	
-	protected $table ="contact_groups";
+class Group extends \Eloquent
+{
+    protected $table = 'contact_groups';
 
-	protected $fillable = [];
+    protected $fillable = [];
 
     public function user()
     {
         return $this->belongsTo('user');
     }
 
-
     public function contact()
     {
         return $this->hasMany('Contact');
     }
-
-
 }

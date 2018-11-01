@@ -1,9 +1,9 @@
 <?php
+
 use Illuminate\Http\Response as IlluminateResponse;
 
-Class ApiController extends \BaseController {
-
-
+class ApiController extends \BaseController
+{
     /**
      * @var int
      */
@@ -16,35 +16,37 @@ Class ApiController extends \BaseController {
 
     /**
      * @param $message
+     *
      * @return json
      */
-    public function responseNotFound( $message )
+    public function responseNotFound($message)
     {
         return $this->setStausCode(404)->responseWithError($message);
     }
 
     /**
      * @param string $message
+     *
      * @return json
      */
-    public function responseWithError( $message = "" )
+    public function responseWithError($message = '')
     {
-        return $this->response(array(
-            "error" => array("message"     => $message ,
-                             "status_code" => $this->getStausCode())
+        return $this->response([
+            'error' => ['message'          => $message,
+                             'status_code' => $this->getStausCode(), ],
 
-        ));
-
+        ]);
     }
 
     /**
      * @param $data
      * @param array $headers
+     *
      * @return json
      */
-    public function response( $data , $headers = [] )
+    public function response($data, $headers = [])
     {
-        return Response::json($data , $this->getStausCode() , $headers);
+        return Response::json($data, $this->getStausCode(), $headers);
     }
 
     /**
@@ -60,7 +62,7 @@ Class ApiController extends \BaseController {
      *
      * @return $this
      */
-    public function setStausCode( $stausCode )
+    public function setStausCode($stausCode)
     {
         $this->stausCode = $stausCode;
 
@@ -69,42 +71,41 @@ Class ApiController extends \BaseController {
 
     /**
      * @param $message
+     *
      * @return json
      */
-    public function responseSuccess( $message )
+    public function responseSuccess($message)
     {
-        return $this->setStausCode(IlluminateResponse::HTTP_OK)->response(array("message" => $message));
-
+        return $this->setStausCode(IlluminateResponse::HTTP_OK)->response(['message' => $message]);
     }
 
     /**
      * @param $data
+     *
      * @return json
      */
-    public function responseSuccessWithOnlyData( $data )
+    public function responseSuccessWithOnlyData($data)
     {
-        return $this->setStausCode(IlluminateResponse::HTTP_OK)->response(array("data" => $data));
-
+        return $this->setStausCode(IlluminateResponse::HTTP_OK)->response(['data' => $data]);
     }
 
     /**
      * @param $message
+     *
      * @return json
      */
-    public function responseForbidden( $message )
+    public function responseForbidden($message)
     {
-        return $this->setStausCode(IlluminateResponse::HTTP_FORBIDDEN)->responseWithError(array($message));
-
+        return $this->setStausCode(IlluminateResponse::HTTP_FORBIDDEN)->responseWithError([$message]);
     }
 
     /**
      * @param $message
+     *
      * @return json
      */
-    public function responseInternalError( $message )
+    public function responseInternalError($message)
     {
-        return $this->setStausCode(IlluminateResponse::HTTP_INTERNAL_SERVER_ERROR)->responseWithError(array($message));
+        return $this->setStausCode(IlluminateResponse::HTTP_INTERNAL_SERVER_ERROR)->responseWithError([$message]);
     }
-
-
 }

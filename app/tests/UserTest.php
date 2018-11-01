@@ -1,10 +1,10 @@
 <?php
 
 
-Class UserTest extends ApiTester {
-
+class UserTest extends ApiTester
+{
     /**
-     * Testing User create
+     * Testing User create.
      *
      * @return void
      */
@@ -14,45 +14,40 @@ Class UserTest extends ApiTester {
         $user = $this->createUserFakerData();
 
         //action
-        $return = $this->postJson('api/user/register' , $user)->message;
-
+        $return = $this->postJson('api/user/register', $user)->message;
 
         //assert
-        $this->assertEquals('Successfully Registered !' , $return);
+        $this->assertEquals('Successfully Registered !', $return);
         $this->assertResponseOk();
 
         return $user;
-
     }
 
-
     /**
-     * Testing User Login with Valid Credentials
+     * Testing User Login with Valid Credentials.
+     *
      * @depends testUserCreate
+     *
      * @return void
      */
-    public function testUserLoginWithValidCredential( $user )
+    public function testUserLoginWithValidCredential($user)
     {
 
         //arrange
         $userLogin = $this->getUserValidLoginData($user);
 
-
         //action
-        $return = $this->postJson('api/user/login' , $userLogin)->message;
-
+        $return = $this->postJson('api/user/login', $userLogin)->message;
 
         //assert
-        $this->assertEquals('Successfully Logged In !' , $return);
+        $this->assertEquals('Successfully Logged In !', $return);
         $this->assertResponseOk();
 
         return Auth::user();
-
     }
 
-
     /**
-     * Testing User Login with Invalid Credentials
+     * Testing User Login with Invalid Credentials.
      *
      * @return void
      */
@@ -62,17 +57,15 @@ Class UserTest extends ApiTester {
         $user = $this->getUserInvalidLoginData();
 
         //action
-        $return = $this->postJson('api/user/login' , $user)->error;
-
+        $return = $this->postJson('api/user/login', $user)->error;
 
         //assert
-        $this->assertEquals('Enter valid credentials !' , $return->message[0]);
+        $this->assertEquals('Enter valid credentials !', $return->message[0]);
         $this->assertResponseStatus(403);
-
     }
 
     /**
-     * Testing User Page with Invalid Credentials
+     * Testing User Page with Invalid Credentials.
      *
      * @return void
      */
@@ -82,16 +75,16 @@ Class UserTest extends ApiTester {
         $return = $this->getJson('api/user/status')->error;
 
         //assert
-        $this->assertEquals('Invalid Credentials' , $return->message);
+        $this->assertEquals('Invalid Credentials', $return->message);
         $this->assertResponseStatus(401);
     }
 
     /**
-     * Testing User status
-     * @depends testUserLoginWithValidCredential
+     * Testing User status.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testgetStatus( $user )
+    public function testgetStatus($user)
     {
 
         //arrange
@@ -100,18 +93,17 @@ Class UserTest extends ApiTester {
         //action
         $return = $this->getJson('api/user/status');
 
-
         //assert
-        $this->assertEquals('Active' , $return->status);
+        $this->assertEquals('Active', $return->status);
         $this->assertResponseOk();
     }
 
     /**
-     * Test user update
-     * @depends testUserLoginWithValidCredential
+     * Test user update.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testUpadteUser( $user )
+    public function testUpadteUser($user)
     {
 
         //arrange
@@ -119,27 +111,23 @@ Class UserTest extends ApiTester {
 
         $newdata = $this->CreateUserFakerData();
 
-
         //action
-        $return = $this->putJson('api/user/update' , $newdata)->message;
-
+        $return = $this->putJson('api/user/update', $newdata)->message;
 
         //assert
-        $this->assertEquals('Profile Updated successfully !' , $return);
+        $this->assertEquals('Profile Updated successfully !', $return);
         $this->assertResponseOk();
     }
 
-
     /**
-     * Test user information
-     * @depends testUserLoginWithValidCredential
+     * Test user information.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testGetUserData( $user )
+    public function testGetUserData($user)
     {
         //arrange
         $this->be($user);
-
 
         //action
         $return = (array) $this->getJson('api/user/data');
@@ -147,65 +135,54 @@ Class UserTest extends ApiTester {
         $result = json_encode($datamaper->mapper($user->toArray()));
 
         //assert
-        $this->assertEquals($result , json_encode($return));
+        $this->assertEquals($result, json_encode($return));
         $this->assertResponseOk();
-
-
     }
 
-
     /**
-     * Test create userphone number
-     * @depends testUserLoginWithValidCredential
+     * Test create userphone number.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testCreateUserPhone( $user )
+    public function testCreateUserPhone($user)
     {
         $this->be($user);
 
         $data['phone_number'] = $this->contacts['numbers'][0];
 
-
         //action
-        $return = $this->putJson('api/user/mobilenumber/' . $user->id , $data)->message;
+        $return = $this->putJson('api/user/mobilenumber/'.$user->id, $data)->message;
 
-        
         //assert
-        $this->assertEquals('Successfully updated phone number !' , $return);
+        $this->assertEquals('Successfully updated phone number !', $return);
         $this->assertResponseOk();
-
-
     }
 
-
     /**
-     * Test user dissable account
-     * @depends testUserLoginWithValidCredential
+     * Test user dissable account.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testDissable( $user )
+    public function testDissable($user)
     {
 
         //arrange
         $this->be($user);
 
         //action
-        $return = $this->deleteJson('api/user/' . $user->id)->message;
-
+        $return = $this->deleteJson('api/user/'.$user->id)->message;
 
         //assert
-        $this->assertEquals('Successfully Disabled Account !' , $return);
+        $this->assertEquals('Successfully Disabled Account !', $return);
         $this->assertResponseOk();
-
     }
 
-
-     /**
-     * Test user logout account
-     * @depends testUserLoginWithValidCredential
+    /**
+     * Test user logout account.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testUserLogout( $user )
+    public function testUserLogout($user)
     {
 
         //arrange
@@ -214,93 +191,76 @@ Class UserTest extends ApiTester {
         //action
         $return = $this->getJson('api/user/logout')->message;
 
-
         //assert
-        $this->assertEquals('Successfully Logged Out !' , $return);
+        $this->assertEquals('Successfully Logged Out !', $return);
         $this->assertResponseOk();
-
     }
 
-
-
-
     /**
-     * Test user to reset password
+     * Test user to reset password.
      *
      * @return object
      */
-     public function testSendResetPasswordTocken()
+    public function testSendResetPasswordTocken()
     {
 
         //arrange
-        $user = User::create(array('username' => 'fasil' , 'fname' => 'teste l name' , 'lname' => 'brown' , 'email' => 'kk.fasil@yahoo.com' , 'address' => 'test address' , 'password' => 'mysecretpass'));
+        $user = User::create(['username' => 'fasil', 'fname' => 'teste l name', 'lname' => 'brown', 'email' => 'kk.fasil@yahoo.com', 'address' => 'test address', 'password' => 'mysecretpass']);
         $this->be($user);
 
-        $data = array('email' => $user->email);
+        $data = ['email' => $user->email];
 
         //action
-        $return = $this->postJson('api/user/password/remind' , $data)->message;
-
+        $return = $this->postJson('api/user/password/remind', $data)->message;
 
         //assert
-        $this->assertEquals('password token sent successfully to your email !' , $return);
+        $this->assertEquals('password token sent successfully to your email !', $return);
         $this->assertResponseOk();
 
         return $user;
-
     }
 
     /**
-     * Test user to reset password
+     * Test user to reset password.
+     *
      * @depends testSendResetPasswordTocken
-     *
      */
-    public function testVerifyPasswordResetToken( $user )
+    public function testVerifyPasswordResetToken($user)
     {
         //arrange
         $this->be($user);
 
+        $token = DB::table(Config::get('auth.reminder.table'))->where('email', Auth::user()->email)->pluck('token');
 
-        $token = DB::table(Config::get('auth.reminder.table'))->where('email' , Auth::user()->email)->pluck('token');
-
-        $data = array('email' => Auth::user()->email , 'password' => 'resetpass' , 'password_confirmation' => 'resetpass' , 'token' => $token);
-
+        $data = ['email' => Auth::user()->email, 'password' => 'resetpass', 'password_confirmation' => 'resetpass', 'token' => $token];
 
         //action
-        $return = $this->postJson('api/user/password/reset' , $data)->message;
-
+        $return = $this->postJson('api/user/password/reset', $data)->message;
 
         //assert
-        $this->assertEquals('Password Reset Succesfully !' , $return);
+        $this->assertEquals('Password Reset Succesfully !', $return);
 
         $this->assertResponseOk();
-
-
     }
-
 
     /**
-     * Test for user update password after logged in
-     * @depends testUserLoginWithValidCredential
+     * Test for user update password after logged in.
      *
+     * @depends testUserLoginWithValidCredential
      */
-    public function testUserPasswordUpdate( $user )
+    public function testUserPasswordUpdate($user)
     {
 
         //arrange
         $this->be($user);
 
-        $input = array('password' => 'newpass##' , 'passwordmatch' => 'newpass##');
+        $input = ['password' => 'newpass##', 'passwordmatch' => 'newpass##'];
 
         //action
-        $return = $this->postJson('api/user/password/update' , $input)->message;
-
+        $return = $this->postJson('api/user/password/update', $input)->message;
 
         //assert
-        $this->assertEquals('Password Updated successfully !' , $return);
+        $this->assertEquals('Password Updated successfully !', $return);
         $this->assertResponseOk();
-
     }
-
-
 }

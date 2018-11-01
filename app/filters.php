@@ -13,7 +13,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 /*
 |--------------------------------------------------------------------------
 | Authentication Filters
@@ -48,10 +47,10 @@ Route::filter('auth', function () {
 
 Route::filter('auth.basic', function () {
     $message = [
-        "error" => [
-            "code" => 401,
-            "message" => "Invalid Credentials"
-        ]
+        'error' => [
+            'code'    => 401,
+            'message' => 'Invalid Credentials',
+        ],
     ];
 
     $headers = ['WWW-Authenticate' => 'Basic'];
@@ -59,10 +58,8 @@ Route::filter('auth.basic', function () {
     $response = Auth::basic('username');
 
     if (!is_null($response)) {
-
         return Response::json($message, 401, $headers);
     }
-
 });
 
 /*
@@ -77,9 +74,9 @@ Route::filter('auth.basic', function () {
 */
 
 Route::filter('guest', function () {
-
-    if (Auth::check()) return Response::json(array('error' => array('message' => 'You already Login')), 403);
-
+    if (Auth::check()) {
+        return Response::json(['error' => ['message' => 'You already Login']], 403);
+    }
 });
 
 /*
@@ -92,11 +89,10 @@ Route::filter('guest', function () {
 */
 
 Route::filter('userstatus', function ($route, $request, $response) {
-
-    if ($response != "data") return Response::json(array('error' => array('message' => 'This service is Unavailable !',"status_code" =>'403')), 403);
-
+    if ($response != 'data') {
+        return Response::json(['error' => ['message' => 'This service is Unavailable !', 'status_code' =>'403']], 403);
+    }
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -108,13 +104,10 @@ Route::filter('userstatus', function ($route, $request, $response) {
 */
 
 Route::filter('favFilter', function ($route, $request, $response) {
-
-    if ($response != "count") return Response::json(array('error' => array('message' => 'This service is Unavailable !',"status_code" =>'403')), 403);
-
+    if ($response != 'count') {
+        return Response::json(['error' => ['message' => 'This service is Unavailable !', 'status_code' =>'403']], 403);
+    }
 });
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +122,6 @@ Route::filter('favFilter', function ($route, $request, $response) {
 
 Route::filter('csrf', function () {
     if (Session::token() != Input::get('_token')) {
-        throw new Illuminate\Session\TokenMismatchException;
+        throw new Illuminate\Session\TokenMismatchException();
     }
 });

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -7,21 +8,20 @@ use molio\ApiDataMapper\FavoriteDataMapper;
 use molio\Validation\FavoriteForm;
 use molio\Validation\FavoriteUpdateForm;
 
-
-class FavoriteController extends ApiController {
-
-    #favorite form validator
+class FavoriteController extends ApiController
+{
+    //favorite form validator
     protected $favoriteFormValidation;
     protected $favoriteUpdateFormValidation;
 
-    #data mapper
+    //data mapper
     protected $favoriteDataMapper;
 
-    function __construct( FavoriteForm $favoriteFormValidation , FavoriteUpdateForm $favoriteFormUpdateValidation , FavoriteDataMapper $favoriteDataMapper )
+    public function __construct(FavoriteForm $favoriteFormValidation, FavoriteUpdateForm $favoriteFormUpdateValidation, FavoriteDataMapper $favoriteDataMapper)
     {
         $this->beforeFilter('auth.basic');
         $param = Route::current()->getParameter('favorite');
-        $this->beforeFilter('favFilter:' . $param , array('only' => 'show'));
+        $this->beforeFilter('favFilter:'.$param, ['only' => 'show']);
 
         //validations
         $this->favoriteFormValidation = $favoriteFormValidation;
@@ -29,12 +29,11 @@ class FavoriteController extends ApiController {
 
         //data mapper
         $this->favoriteDataMapper = $favoriteDataMapper;
-
     }
 
     /**
      * Display a listing of favorites of the user
-     * GET api/favorite
+     * GET api/favorite.
      *
      * @return json
      */
@@ -45,26 +44,23 @@ class FavoriteController extends ApiController {
 
         //return favorite datas
         return $this->responseSuccessWithOnlyData($this->favoriteDataMapper->mapCollection($user->favorite->toArray()));
-
     }
 
     /**
      * create new favorite for the user
-     * GET /favorite/create
+     * GET /favorite/create.
      *
      * @return Response
      */
     public function store()
     {
-        $inputs = Input::only('name' , 'address' , 'lat' , 'lng');
+        $inputs = Input::only('name', 'address', 'lat', 'lng');
 
         //validating Inputs
-        try
-        {
-
+        try {
             $this->favoriteFormValidation->validate($inputs);
 
-            #now store data to favorite table
+            //now store data to favorite table
             $user = Auth::user();
             $favTable = new \Favorite();
             $favTable->name = $inputs['name'];
@@ -74,19 +70,17 @@ class FavoriteController extends ApiController {
             $favTable->user()->associate($user)->save();
 
             return $this->responseSuccess('Successfully Created Favorite Item !');
-
-        } catch (FormValidationException $e)
-        {
+        } catch (FormValidationException $e) {
             //returning errors from Exception
             //Format = error : { message : {"field" :['error'], "field2" :['error2'],.... } }
             return $this->responseWithError($e->getErrors()->toArray());
-
         }
     }
 
     /**
      * Display the count of the favourate item
-     * GET /favorite/{id}
+     * GET /favorite/{id}.
+     *
      * @return json
      */
     public function count()
@@ -94,30 +88,27 @@ class FavoriteController extends ApiController {
         $user = Auth::user();
 
         return $this->responseSuccessWithOnlyData(
-            array(
-                'count' => $user->favorite()->count()
-            )
+            [
+                'count' => $user->favorite()->count(),
+            ]
         );
-
     }
-
 
     /**
      * Update the favorite iten.
-     * PUT /favorite/{id}
+     * PUT /favorite/{id}.
      *
-     * @param  int $favorite
+     * @param int $favorite
+     *
      * @return json
      */
-    public function update( $favorite )
+    public function update($favorite)
     {
         $user = Auth::user();
 
         //checking the requested id belongs to the logged in user
-        if ( $favorite->user->id == $user->id )
-        {
-            try
-            {
+        if ($favorite->user->id == $user->id) {
+            try {
                 $inputs = Input::only('name');
                 //validating Inputs
                 $this->favoriteFormUpdateValidation->validate($inputs);
@@ -125,45 +116,35 @@ class FavoriteController extends ApiController {
                 $favorite->save();
 
                 return $this->responseSuccess('Successfully Updated favorite item !');
-
-            } catch (FormValidationException $e)
-            {
+            } catch (FormValidationException $e) {
                 //returning errors from Exception
                 //Format = error { message : {"field" :['error'], "field2" :['error2'],.... } }
                 return $this->responseWithError($e->getErrors()->toArray());
-
             }
-
-        } else
-        {
+        } else {
             return $this->responseForbidden('This service is Unavailable !');
         }
-
-
     }
 
     /**
      * Remove the favorite item
-     * DELETE /favorite/{id}
+     * DELETE /favorite/{id}.
      *
-     * @param  int $favorite
+     * @param int $favorite
+     *
      * @return json
      */
-    public function destroy( $favorite )
+    public function destroy($favorite)
     {
         $user = Auth::user();
 
         //checking the requested id belongs to the logged in user
-        if ( $favorite->user->id == $user->id )
-        {
+        if ($favorite->user->id == $user->id) {
             $favorite->delete();
 
             return $this->responseSuccess('Successfully Deleted favorite item !');
-        } else
-        {
+        } else {
             return $this->responseForbidden('This service is Unavailable !');
         }
-
     }
-
 }

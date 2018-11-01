@@ -11,14 +11,14 @@
 |
 */
 
-ClassLoader::addDirectories(array(
+ClassLoader::addDirectories([
 
-	app_path().'/commands',
-	app_path().'/controllers',
-	app_path().'/models',
-	app_path().'/database/seeds',
+    app_path().'/commands',
+    app_path().'/controllers',
+    app_path().'/models',
+    app_path().'/database/seeds',
 
-));
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +46,8 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 |
 */
 
-App::error(function(Exception $exception , $code)
-{
-	Log::error($exception);
-
+App::error(function (Exception $exception, $code) {
+    Log::error($exception);
 });
 
 /*
@@ -60,22 +58,13 @@ App::error(function(Laracasts\Validation\FormValidationException $exception , $c
     return Response::json(array('error'=>array('message'=>'Invalid Parameters')), 401);
 });*/
 
-App::error(function(Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception)
-{
-    return Response::json(array('error' => array('message' => 'This service is Unavailable !',"status_code" =>'403')), 403);
-
+App::error(function (Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception) {
+    return Response::json(['error' => ['message' => 'This service is Unavailable !', 'status_code' =>'403']], 403);
 });
 
-
-App::error(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
-{
-
-    return Response::json(array('error' => array('message' => 'This service is Unavailable !',"status_code" =>'403')), 403);
-
+App::error(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception) {
+    return Response::json(['error' => ['message' => 'This service is Unavailable !', 'status_code' =>'403']], 403);
 });
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -88,9 +77,8 @@ App::error(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpExceptio
 |
 */
 
-App::down(function()
-{
-	return Response::make("Be right back!", 503);
+App::down(function () {
+    return Response::make('Be right back!', 503);
 });
 
 /*

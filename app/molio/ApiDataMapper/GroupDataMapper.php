@@ -1,19 +1,15 @@
-<?php namespace molio\ApiDataMapper;
+<?php
 
+namespace molio\ApiDataMapper;
 
-Class GroupDataMapper extends DataMapper {
-
-
-    public function mapper( $group )
+class GroupDataMapper extends DataMapper
+{
+    public function mapper($group)
     {
-
         return [
-            'Id'        => $group['id'] ,
-            'Name'      => $group['name'] ,
-          
+            'Id'        => $group['id'],
+            'Name'      => $group['name'],
+
         ];
-
     }
-
-
 }

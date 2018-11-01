@@ -1,19 +1,15 @@
-<?php namespace molio\ApiDataMapper;
+<?php
 
+namespace molio\ApiDataMapper;
 
-Class ContactDataMapper extends DataMapper {
-
-
-    public function mapper( $contact )
+class ContactDataMapper extends DataMapper
+{
+    public function mapper($contact)
     {
-
         return [
-            'Id'        => $contact['id'] ,
-            'Number'      => $contact['number'] ,
-            
+            'Id'          => $contact['id'],
+            'Number'      => $contact['number'],
+
         ];
-
     }
-
-
 }
